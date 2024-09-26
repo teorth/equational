@@ -98,19 +98,6 @@ theorem Equation2_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation2 
   dsimp [hG] at h
   linarith
 
-theorem Equation3_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation7 G := by
-  let hG : Magma Nat := {
-    op := fun x _ => x
-  }
-  use ℕ, hG
-  constructor
-  . intro _ _
-    rfl
-  by_contra h
-  replace h := h 1 0
-  dsimp [hG] at h
-  linarith
-
 theorem Equation3_not_implies_Equation5 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation5 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
@@ -121,6 +108,19 @@ theorem Equation3_not_implies_Equation5 : ∃ (G: Type) (_: Magma G), Equation3 
     rfl
   by_contra h
   replace h := h 0 0 0 1 0 0
+  dsimp [hG] at h
+  linarith
+
+theorem Equation3_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation7 G := by
+  let hG : Magma Nat := {
+    op := fun x _ => x
+  }
+  use ℕ, hG
+  constructor
+  . intro _ _
+    rfl
+  by_contra h
+  replace h := h 1 0
   dsimp [hG] at h
   linarith
 
