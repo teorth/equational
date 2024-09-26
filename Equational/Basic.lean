@@ -58,6 +58,10 @@ theorem Equation3_implies_Equation6 (G: Type*) [Magma G] (h: Equation3 G) : Equa
   intro _ _ _
   rw [h, h]
 
+theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G := by
+  intro x y z w u
+  rw [h y z, h x w, h x y, h x u]
+
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation4_implies_Equation7 (G: Type*) [Magma G] (h: Equation4 G) : Equation7 G := by
   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
