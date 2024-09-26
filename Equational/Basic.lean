@@ -13,83 +13,72 @@ class Magma (α : Type u) where
 
 /- List of equational laws being studied -/
 
-def Equation1 (G: Type*) [Magma G] := ∀ x y : G, x = y
-
-def Equation2 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
-
-def Equation3 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = x
-
-def Equation4 (G: Type*) [Magma G] := ∀ x y : G, (x ∘ x) ∘ y = y ∘ x
-
-def Equation5 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
-
-def Equation6 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
-
-def Equation7 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
-
-def Equation8 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
-
-def Equation9 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
-
-def Equation10 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
-
-def Equation11 (G: Type*) [Magma G] := ∀ x : G, x = x
-
+def Equation1 (G: Type*) [Magma G] := ∀ x : G, x = x
+def Equation2 (G: Type*) [Magma G] := ∀ x y : G, x = y
+def Equation4 (G: Type*) [Magma G] := ∀ x y : G, x = x ∘ y
+def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
+def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
+def Equation46 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w
+def Equation387 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = (y ∘ y) ∘ x
+def Equation4512 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ (y ∘ z) = (x ∘ y) ∘ z
+def Equation4513 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ (y ∘ z) = (x ∘ y) ∘ w
+def Equation4552 (G: Type*) [Magma G] := ∀ x y z w u : G, x ∘ (y ∘ z) = (x ∘ w) ∘ u
+def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (w ∘ u) ∘ v
 
 
 /- Positive implications -/
 
-theorem Equation1_implies_Equation2 (G: Type*) [Magma G] (h: Equation1 G) : Equation2 G :=
+theorem Equation1_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
-theorem Equation1_implies_Equation3 (G: Type*) [Magma G] (h: Equation1 G) : Equation3 G :=
+theorem Equation1_implies_Equation3 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
   fun _ _ => h _ _
 
-theorem Equation2_implies_Equation4 (G: Type*) [Magma G] (h: Equation2 G) : Equation4 G :=
+theorem Equation46_implies_Equation4 (G: Type*) [Magma G] (h: Equation46 G) : Equation387 G :=
   fun _ _ => h _ _ _ _
 
-theorem Equation2_implies_Equation5 (G: Type*) [Magma G] (h: Equation2 G) : Equation5 G :=
+theorem Equation46_implies_Equation4582 (G: Type*) [Magma G] (h: Equation46 G) : Equation4582 G :=
   fun _ _ _ _ _ _ => h _ _ _ _
 
-theorem Equation2_implies_Equation6 (G: Type*) [Magma G] (h: Equation2 G) : Equation6 G :=
+theorem Equation46_implies_Equation42 (G: Type*) [Magma G] (h: Equation46 G) : Equation42 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation3_implies_Equation6 (G: Type*) [Magma G] (h: Equation3 G) : Equation6 G := by
+theorem Equation3_implies_Equation42 (G: Type*) [Magma G] (h: Equation4 G) : Equation42 G := by
   intro _ _ _
-  rw [h, h]
+  rw [<-h, <-h]
 
-theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G := by
+theorem Equation3_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4 G) : Equation4552 G := by
   intro x y z w u
-  rw [h, h, h]
+  rw [<-h, <-h, <-h]
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
-theorem Equation4_implies_Equation7 (G: Type*) [Magma G] (h: Equation4 G) : Equation7 G := by
+theorem Equation4_implies_Equation43 (G: Type*) [Magma G] (h: Equation387 G) : Equation43 G := by
   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
-    rw [h, h]
+    rw [<-h, <-h]
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by
-    rw [<-idem, h, idem]
+    rw [<-idem, <-h, idem]
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by
-    rw [h, h]
+    rw [<-h, <-h]
   intro x y
   rw [<- op_idem, comm, op_idem]
 
-theorem Equation5_implies_Equation8 (G: Type*) [Magma G] (h: Equation5 G) : Equation8 G :=
+theorem Equation4582_implies_Equation4552 (G: Type*) [Magma G] (h: Equation4582 G) : Equation4552 G :=
   fun _ _ _ _ _ => h _ _ _ _ _ _
 
-theorem Equation8_implies_Equation9 (G: Type*) [Magma G] (h: Equation8 G) : Equation9 G :=
+theorem Equation4552_implies_Equation4513 (G: Type*) [Magma G] (h: Equation4552 G) : Equation4513 G :=
   fun _ _ _ _ => h _ _ _ _ _
 
-theorem Equation9_implies_Equation10 (G: Type*) [Magma G] (h: Equation9 G) : Equation10 G :=
+theorem Equation4513_implies_Equation4512 (G: Type*) [Magma G] (h: Equation4513 G) : Equation4512 G :=
   fun _ _ _ => h _ _ _ _
 
-theorem Equation11_true (G: Type*) [Magma G] : Equation11 G :=
+theorem Equation11_true (G: Type*) [Magma G] : Equation1 G :=
   fun _ => rfl
 
 
 
 /- Counterexamples -/
 
-theorem Equation2_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation2 G ∧ ¬ Equation3 G := by
+theorem Equation46_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation46 G ∧ ¬ Equation4 G := by
   let hG : Magma Nat := {
     op := fun _ _ => 0
   }
@@ -102,7 +91,7 @@ theorem Equation2_not_implies_Equation3 : ∃ (G: Type) (_: Magma G), Equation2 
   dsimp [hG] at h
   linarith
 
-theorem Equation3_not_implies_Equation5 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation5 G := by
+theorem Equation3_not_implies_Equation4582 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation4582 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
   }
@@ -115,7 +104,7 @@ theorem Equation3_not_implies_Equation5 : ∃ (G: Type) (_: Magma G), Equation3 
   dsimp [hG] at h
   linarith
 
-theorem Equation3_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation3 G ∧ ¬ Equation7 G := by
+theorem Equation3_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
   }
@@ -128,7 +117,7 @@ theorem Equation3_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation3 
   dsimp [hG] at h
   linarith
 
-theorem Equation5_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation6 G := by
+theorem Equation4582_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = 0 ∧ y = 0 then 1 else 2
   }
@@ -148,7 +137,7 @@ theorem Equation5_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation5 
   dsimp [hG] at h
   linarith
 
-theorem Equation5_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation5 G ∧ ¬ Equation7 G := by
+theorem Equation4582_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation4582 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = 1 ∧ y = 2 then 3 else 4
   }
@@ -168,7 +157,7 @@ theorem Equation5_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation5 
   dsimp [hG] at h
   linarith
 
-theorem Equation6_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation6 G ∧ ¬ Equation7 G := by
+theorem Equation42_not_implies_Equation43 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation43 G := by
   let hG : Magma Nat := {
     op := fun x _ => x
   }
@@ -181,7 +170,7 @@ theorem Equation6_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation6 
   dsimp [hG] at h
   linarith
 
-theorem Equation6_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Equation6 G ∧ ¬ Equation10 G := by
+theorem Equation42_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation42 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := {
     op := fun x _ => x + 1
   }
@@ -194,7 +183,7 @@ theorem Equation6_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Equation6
   dsimp [hG] at h
   linarith
 
-theorem Equation7_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation7 G ∧ ¬ Equation6 G := by
+theorem Equation43_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := {
     op := fun x y => x+y
   }
@@ -206,7 +195,7 @@ theorem Equation7_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation7 
   dsimp [hG] at h
   linarith
 
-theorem Equation7_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Equation7 G ∧ ¬ Equation10 G := by
+theorem Equation43_not_implies_Equation4512 : ∃ (G: Type) (_: Magma G), Equation43 G ∧ ¬ Equation4512 G := by
   let hG : Magma Nat := {
     op := fun x y => x * y + 1
   }
@@ -220,7 +209,7 @@ theorem Equation7_not_implies_Equation10 : ∃ (G: Type) (_: Magma G), Equation7
   dsimp [hG] at h
   linarith
 
-theorem Equation9_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation9 G ∧ ¬ Equation8 G := by
+theorem Equation4513_not_implies_Equation4552 : ∃ (G: Type) (_: Magma G), Equation4513 G ∧ ¬ Equation4552 G := by
   let hG : Magma Nat := {
     op := fun x y => if x = 0 then (if y ≤ 2 then 1 else 2) else x
   }
@@ -246,7 +235,7 @@ theorem Equation9_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation9 
   dsimp [hG] at h
   linarith
 
-theorem Equation10_not_implies_Equation9 : ∃ (G: Type) (_: Magma G), Equation10 G ∧ ¬ Equation9 G := by
+theorem Equation4512_not_implies_Equation4513 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation4513 G := by
   let hG : Magma Nat := {
     op := fun x y => x + y
   }
@@ -260,7 +249,7 @@ theorem Equation10_not_implies_Equation9 : ∃ (G: Type) (_: Magma G), Equation1
   dsimp [hG] at h
   linarith
 
-theorem Equation10_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation10 G ∧ ¬ Equation6 G := by
+theorem Equation4512_not_implies_Equation42 : ∃ (G: Type) (_: Magma G), Equation4512 G ∧ ¬ Equation42 G := by
   let hG : Magma Nat := {
     op := fun x y => x + y
   }
