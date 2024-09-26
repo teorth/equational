@@ -15,7 +15,12 @@ class Magma (α : Type u) where
 
 def Equation1 (G: Type*) [Magma G] := ∀ x : G, x = x
 def Equation2 (G: Type*) [Magma G] := ∀ x y : G, x = y
+def Equation3 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ x
 def Equation4 (G: Type*) [Magma G] := ∀ x y : G, x = x ∘ y
+def Equation5 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ x
+def Equation6 (G: Type*) [Magma G] := ∀ x y : G, x = y ∘ y
+def Equation7 (G: Type*) [Magma G] := ∀ x y z : G, x = y ∘ z
+def Equation8 (G: Type*) [Magma G] := ∀ x : G, x = x ∘ (x ∘ x)
 def Equation42 (G: Type*) [Magma G] := ∀ x y z : G, x ∘ y = x ∘ z
 def Equation43 (G: Type*) [Magma G] := ∀ x y : G, x ∘ y = y ∘ x
 def Equation46 (G: Type*) [Magma G] := ∀ x y z w : G, x ∘ y = z ∘ w

@@ -1,0 +1,1 @@
+This project has moved to https://github.com/teorth/equational_theories .  The current repository will no longer be supported.
