@@ -60,18 +60,18 @@ theorem Equation3_implies_Equation6 (G: Type*) [Magma G] (h: Equation3 G) : Equa
 
 theorem Equation3_implies_Equation8 (G: Type*) [Magma G] (h: Equation3 G) : Equation8 G := by
   intro x y z w u
-  rw [h y z, h x w, h x y, h x u]
+  rw [h, h, h]
 
 /-- This proof is from https://mathoverflow.net/a/450905/766 -/
 theorem Equation4_implies_Equation7 (G: Type*) [Magma G] (h: Equation4 G) : Equation7 G := by
   have idem (x : G) : (x ∘ x) ∘ (x ∘ x) = (x ∘ x) := by
-    rw [h x (x ∘ x), h x x]
+    rw [h, h]
   have comm (x y : G) : (x ∘ x) ∘ y = y ∘ (x ∘ x) := by
-    rw [<-idem x, h (x ∘ x) y, idem x]
+    rw [<-idem, h, idem]
   have op_idem (x y : G) : (x ∘ x) ∘ (y ∘ y) = x ∘ y := by
-    rw [h x (y ∘ y), h y x]
+    rw [h, h]
   intro x y
-  rw [<- op_idem x y, comm x (y ∘ y), op_idem y x]
+  rw [<- op_idem, comm, op_idem]
 
 theorem Equation5_implies_Equation8 (G: Type*) [Magma G] (h: Equation5 G) : Equation8 G :=
   fun _ _ _ _ _ => h _ _ _ _ _ _
@@ -139,12 +139,10 @@ theorem Equation5_not_implies_Equation6 : ∃ (G: Type) (_: Magma G), Equation5 
     calc
       _ = 2 := by
         by_cases h' : y = 0 ∧ z = 0
-        . simp [h']
-        simp [h']
+        all_goals {simp [h']}
       _ = _ := by
         by_cases h' : w = 0 ∧ u = 0
-        . simp [h']
-        simp [h']
+        all_goals {simp [h']}
   by_contra h
   replace h := h 0 0 1
   dsimp [hG] at h
@@ -161,12 +159,10 @@ theorem Equation5_not_implies_Equation7 : ∃ (G: Type) (_: Magma G), Equation5 
     calc
       _ = 4 := by
         by_cases h' : y = 1 ∧ z = 2
-        . simp [h']
-        simp [h']
+        all_goals {simp [h']}
       _ = _ := by
         by_cases h' : w = 1 ∧ u = 2
-        . simp [h']
-        simp [h']
+        all_goals {simp [h']}
   by_contra h
   replace h := h 1 2
   dsimp [hG] at h
@@ -235,18 +231,15 @@ theorem Equation9_not_implies_Equation8 : ∃ (G: Type) (_: Magma G), Equation9 
     . simp [hG, h]
       have : ¬ (if y ≤ 2 then 1 else 2) = 0 := by
         by_cases h' : y ≤ 2
-        . simp [h']
-        simp [h']
+        all_goals {simp [h']}
       simp [this]
       congr 1
       by_cases h0 : y = 0
       . simp [h0]
         by_cases hz : z ≤ 2
-        . simp [hz]
-        simp [hz]
+        all_goals {simp [hz]}
       by_cases h' : y ≤ 2
-      . simp [h0, h']
-      simp [h', h0]
+      all_goals {simp [h0, h']}
     simp [hG, h]
   by_contra h
   replace h := h 0 0 0 3 3
