@@ -93,7 +93,7 @@ if len(argv) > 1 and argv[1] in {'-h', '/h', '/?', '--help', '/help'}:
     print(f'    Generates all equations up to {EQ_SIZE} operations and sends them to the standard output.')
     print(f'    To output to a file use the > operator of your shell.')
     print(f'    If the --shapes option is present, the shapes of the equations are printed instead.')
-    print(f'    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational')
+    print(f'    If the --lean option is present, the equations are printed in the format of https://github.com/teorth/equational_theories')
     exit(1)
 
 print(f'Generated {len(eqs)} equations', file=stderr)
@@ -112,5 +112,5 @@ if len(argv) > 1 and argv[1] == '--lean':
         print(f'def Equation{i + 1} (G: Type*) [Magma G] := ∀ {vars} : G, {format_expr(lhs)} = {format_expr(rhs)}')
     exit(0)
 
-for lhs, rhs in generate_all_eqs():
+for lhs, rhs in eqs:
     print(format_expr(lhs), '=', format_expr(rhs))
