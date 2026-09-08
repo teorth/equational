@@ -18,6 +18,10 @@ def generated_formulas():
     ]
 
 
+def test_equation1_is_reflexive():
+    assert generated_formulas()[0] == "x = x"
+
+
 def test_same_length():
     formulas = generated_formulas()
     lines = [ln for ln in equations_txt().read_text().splitlines() if ln.strip()]
@@ -38,6 +42,7 @@ def test_formulas_appear_in_order():
 
 
 if __name__ == "__main__":
+    test_equation1_is_reflexive()
     test_same_length()
     test_def_headers_are_consecutive()
     test_formulas_appear_in_order()
