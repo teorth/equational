@@ -24,6 +24,12 @@ def test_same_length():
     assert len(formulas) == len(lines) == 4694
 
 
+def test_def_headers_are_consecutive():
+    lines = equations_txt().read_text().splitlines()
+    for i, line in enumerate(lines, 1):
+        assert line.startswith(f"def Equation{i} "), i
+
+
 def test_formulas_appear_in_order():
     formulas = generated_formulas()
     lines = equations_txt().read_text().splitlines()
@@ -33,5 +39,6 @@ def test_formulas_appear_in_order():
 
 if __name__ == "__main__":
     test_same_length()
+    test_def_headers_are_consecutive()
     test_formulas_appear_in_order()
     print("ok - equations.txt")
