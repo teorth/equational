@@ -39,43 +39,62 @@ def get_unknown_implications(universe, known_implies, known_not_implies):
     return set((a, b) for a in universe for b in universe) - all_implications - all_negative_implications
 
 
+THEOREM_ALWAYS = re.compile(
+    r'theorem\s+\S+\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s+G\s*:='
+)
+THEOREM_IMPLIES = re.compile(
+    r'theorem\s+\S+\s+.*\[Magma\s+G\]\s*\([^:]*:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:='
+)
+THEOREM_REFUTE = re.compile(
+    r'theorem\s+.*:\s*∃.*\(_\s*:\s*Magma\s+G\),\s*(Equation\d+)\s+G\s*∧\s*¬\s*(Equation\d+)\s+G\s*:='
+)
+
+
 def parse_proofs_file(file_name):
-    # This code is buggy: it doesn't verify that the proofs are correct.
-    # It is also extermely sensitive to formatting of the proof types. There's
-    # probably a way to get this directly from Lean.
+    """Read equation defs and implication theorems from a Lean file.
+
+    This still does not check that the proofs are correct; it only reads
+    the statement of each theorem. Hypothesis names like `h` or `h1` are
+    accepted, not just a single character.
+    """
     universe = []
     known_implies, known_not_implies = set(), set()
-    for line in open(file_name):
-        if m := re.match(r'def\s+(Equation\d+)\s+', line):
-            universe.append(m.group(1))
-            known_implies.add((m.group(1), m.group(1)))
-        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*:\s*(Equation\d+)\s*G\s*:=', line):
-            for eq in universe:
-                known_implies.add((eq, m.group(1)))
-        elif m := re.match(r'theorem\s+.*\[Magma\s+G\]\s*\(.:\s*(Equation\d+)\s+G\)\s*:\s*(Equation\d+)\s+G\s*:=', line):
-            known_implies.add((m.group(1), m.group(2)))
-        elif m := re.match(r'theorem\s+.*:\s*∃.*\(_:\s*Magma\s+G\),\s*(Equation\d+)\s+G\s*∧\s*¬\s*(Equation\d+)\s+G\s*:=', line):
-            known_not_implies.add((m.group(1), m.group(2)))
+    with open(file_name) as handle:
+        for line in handle:
+            if m := re.match(r'def\s+(Equation\d+)\s+', line):
+                universe.append(m.group(1))
+                known_implies.add((m.group(1), m.group(1)))
+            elif m := THEOREM_ALWAYS.match(line):
+                for eq in universe:
+                    known_implies.add((eq, m.group(1)))
+            elif m := THEOREM_IMPLIES.match(line):
+                known_implies.add((m.group(1), m.group(2)))
+            elif m := THEOREM_REFUTE.match(line):
+                known_not_implies.add((m.group(1), m.group(2)))
     return universe, known_implies, known_not_implies
 
 
-try:
-    file_name = argv[1]
-    assert os.path.exists(file_name)
-except:
-    print('Usage: python process_implications.py <file_name.lean>')
-    exit(1)
+def main(argv=argv):
+    try:
+        file_name = argv[1]
+        assert os.path.exists(file_name)
+    except (IndexError, AssertionError):
+        print('Usage: python process_implications.py <file_name.lean>')
+        return 1
+
+    universe, known_implies, known_not_implies = parse_proofs_file(file_name)
+
+    all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
+
+    print(f'Found {len(all_unknown)} unknown implications')
+    if all_unknown:
+        k = min(10, len(all_unknown))
+        if k < len(all_unknown):
+            print('Sample of', k, 'unknown implications:')
+        for a, b in sample(list(all_unknown), k):
+            print(f'{a} => {b}')
+    return 0
 
 
-universe, known_implies, known_not_implies = parse_proofs_file(file_name)
-
-
-all_unknown = get_unknown_implications(universe, known_implies, known_not_implies)
-
-print(f'Found {len(all_unknown)} unknown implications')
-if all_unknown:
-    k = min(10, len(all_unknown))
-    if k < len(all_unknown):
-        print('Sample of', k, 'unknown implications:')
-    for a, b in sample(list(all_unknown), k):
-        print(f'{a} => {b}')
+if __name__ == '__main__':
+    raise SystemExit(main())
