@@ -33,6 +33,9 @@ def Equation4582 (G: Type*) [Magma G] := ∀ x y z w u v: G, x ∘ (y ∘ z) = (
 
 /- Positive implications -/
 
+theorem Equation2_implies_Equation1 (G: Type*) [Magma G] (_h: Equation2 G) : Equation1 G :=
+  fun _ => rfl
+
 theorem Equation1_implies_Equation46 (G: Type*) [Magma G] (h: Equation2 G) : Equation46 G :=
   fun _ _ _ _ => h _ _
 
