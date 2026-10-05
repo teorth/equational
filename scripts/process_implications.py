@@ -46,6 +46,7 @@ def parse_proofs_file(file_name):
     universe = []
     known_implies, known_not_implies = set(), set()
     for line in open(file_name):
+        line = line.lstrip()
         if m := re.match(r'def\s+(Equation\d+)\s+', line):
             universe.append(m.group(1))
             known_implies.add((m.group(1), m.group(1)))
